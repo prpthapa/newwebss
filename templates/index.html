@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+<header class="header" id="header">
+      <div class="container">
+        <a href="{% url 'index' %}" class="logo" aria-label="Notes Home">
+          <i class="fas fa-graduation-cap"></i>
+          <span>NOTES</span>
+        </a>
+
+        <nav class="navbar" id="navbar">
+          <ul>
+            <li>
+              <a href="#home" class="nav-link active">Home</a>
+            </li>
+            <li>
+              <a href="#subjects" class="nav-link">Subjects</a>
+            </li>
+            <li>
+              <a href="#features" class="nav-link">Features</a>
+            </li>
+            <li>
+              <a href="#about" class="nav-link">About</a>
+            </li>
+            <li>
+              <a href="#contact" class="nav-link">Contact</a>
+            </li>
+          </ul>
+        </nav>
+
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+{% endblock header %}
+
+{% block hero %}
+  <section class="hero" id="home">
+    <div class="hero-background">
+      <div class="animated-bg"></div>
+    </div>
+
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <span class="hero-badge" data-aos="fade-down">Free Education for All</span>
+          <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100">
+            Master Your Studies with
+            <span class="highlight">Quality Notes</span>
+          </h1>
+          <p class="hero-description" data-aos="fade-up" data-aos-delay="200">Access high-quality, handwritten notes for Physics, Chemistry, and Computer Science. Simplify complex topics and excel in your academic journey.</p>
+          <div class="hero-buttons" data-aos="fade-up" data-aos-delay="300">
+            <a href="#subjects" class="btn btn-primary">
+              Explore Notes
+              <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="#about" class="btn btn-secondary">
+              Learn More
+              <i class="fas fa-info-circle"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-stats" data-aos="fade-left" data-aos-delay="400">
+          <div class="stat-card stat-card-1">
+            <div class="stat-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <div class="stat-info">
+              <h3 class="stat-number">{{ subjects.count }}</h3>
+              <p class="stat-label">Subject{{ subjects.count|pluralize }} Available</p>
+            </div>
+          </div>
+          <div class="stat-card stat-card-2">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+              <h3 class="stat-number">Join Us</h3>
+              <p class="stat-label">Growing Student Community</p>
+            </div>
+          </div>
+          <div class="stat-card stat-card-3">
+            <div class="stat-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-info">
+              <h3 class="stat-number">Rate Us</h3>
+              <p class="stat-label">Be the First to Rate Us</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="mouse">
+        <div class="wheel"></div>
+      </div>
+      <p>Scroll to explore</p>
+    </div>
+  </section>
+{% endblock %}
+
+{% block features %}
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-badge">Why Choose Us</span>
+        <h2 class="section-title">Everything You Need to Succeed</h2>
+        <p class="section-description">We provide comprehensive study materials designed to make learning effective and enjoyable</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-icon">
+            <i class="fas fa-pen-fancy"></i>
+          </div>
+          <h3 class="feature-title">Handwritten Notes</h3>
+          <p class="feature-description">High-quality, carefully crafted handwritten notes that make complex concepts easy to understand</p>
+        </div>
+
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-icon">
+            <i class="fas fa-clipboard-question"></i>
+          </div>
+          <h3 class="feature-title">Practice Questions</h3>
+          <p class="feature-description">Comprehensive question banks aligned with your syllabus to test your knowledge</p>
+        </div>
+
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3 class="feature-title">24/7 Access</h3>
+          <p class="feature-description">Study anytime, anywhere with unlimited access to all our educational resources</p>
+        </div>
+
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-icon">
+            <i class="fas fa-medal"></i>
+          </div>
+          <h3 class="feature-title">Quality Assured</h3>
+          <p class="feature-description">Every note is verified for accuracy and clarity by subject matter experts</p>
+        </div>
+
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-icon">
+            <i class="fas fa-download"></i>
+          </div>
+          <h3 class="feature-title">Easy Download</h3>
+          <p class="feature-description">Download notes in multiple formats for offline study and convenience</p>
+        </div>
+
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-icon">
+            <i class="fas fa-sync-alt"></i>
+          </div>
+          <h3 class="feature-title">Regular Updates</h3>
+          <p class="feature-description">Fresh content added regularly to keep you updated with the latest curriculum</p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block subjects %}
+<section class="subjects" id="subjects">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-badge">Our Subjects</span>
+      <h2 class="section-title">Explore Study Materials</h2>
+      <p class="section-description">Choose your subject and start your journey to academic excellence</p>
+    </div>
+    
+    <div class="subjects-grid">
+      {% for subject in subjects %}
+      <article class="subject-card" data-aos="zoom-in" data-aos-delay="{{ forloop.counter }}00">
+        <div class="subject-image">
+          {% if subject.preview_image %}
+          <img src="{{ subject.preview_image.url }}" alt="{{ subject.name }}" loading="lazy" />
+          {% else %}
+          <div class="subject-image-placeholder">
+            <i class="{{ subject.icon_class }}"></i>
+          </div>
+          {% endif %}
+          <div class="subject-overlay">
+            <span class="subject-badge">{{ subject.get_notes_count }}+ Notes</span>
+          </div>
+        </div>
+        <div class="subject-content">
+          <h3 class="subject-title">{{ subject.name }}</h3>
+          <p class="subject-description">{{ subject.description|truncatewords:20 }}</p>
+          <div class="subject-meta">
+            <span><i class="fas fa-book"></i> {{ subject.get_chapters_count }} Chapter{{ subject.get_chapters_count|pluralize }}</span>
+          </div>
+          <a href="{% url 'subject_detail' subject.slug %}" class="subject-btn">
+            Explore {{ subject.name }}
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock subjects %}
+
+{% block about %}
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-image" data-aos="fade-right">
+        <img src="{% static 'images/boy.svg' %}" alt="Student learning with Notes platform" loading="lazy" />
+        <div class="about-decoration"></div>
+      </div>
+
+      <div class="about-text" data-aos="fade-left">
+        <span class="section-badge">About Us</span>
+        <h2 class="section-title">Your Learning Partner</h2>
+        <p class="about-description">
+          Welcome to <strong>Notes</strong>, your trusted source for clear, concise, and well-organized study materials. We're dedicated to helping students simplify their learning journey by providing high-quality notes across a variety of subjects.
+        </p>
+        <p class="about-description">Our goal is to make studying easier, faster, and more effective. Whether you're preparing for exams, revising lessons, or exploring new topics, we offer reliable resources that save time and boost understanding.</p>
+
+        <div class="about-features">
+          <div class="about-feature">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <h4>Quality Content</h4>
+              <p>Every note is carefully prepared for accuracy and clarity</p>
+            </div>
+          </div>
+          <div class="about-feature">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <h4>Free Access</h4>
+              <p>All educational resources are completely free for students</p>
+            </div>
+          </div>
+          <div class="about-feature">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <h4>Regular Updates</h4>
+              <p>Continuous improvement and addition of new study materials</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-cta">
+          <a href="#subjects" class="btn btn-primary">
+            Start Learning
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock about %}

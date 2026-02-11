@@ -1,0 +1,296 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {% comment %} <!-- SEO Meta Tags --> {% endcomment %}
+    <title>Notes - Free Educational Study Materials & Notes Online | Physics, Chemistry, Computer Science</title>
+    <meta name="description" content="Access high-quality, free handwritten notes and study materials for Physics, Chemistry, and Computer Science. Simplify your learning journey with clear, concise educational resources." />
+    <meta name="keywords" content="educational notes, study materials, physics notes, chemistry notes, computer science notes, free notes, handwritten notes, exam preparation" />
+    <meta name="author" content="Notes" />
+    <meta name="robots" content="index, follow" />
+
+    {% comment %} <!-- Open Graph Meta Tags --> {% endcomment %}
+    <meta property="og:title" content="Notes - Free Educational Study Materials Online" />
+    <meta property="og:description" content="High-quality handwritten notes for Physics, Chemistry, and Computer Science students." />
+    <meta property="og:image" content="https://tpradeep.com.np/favicon.png" />
+    <meta property="og:url" content="https://tpradeep.com.np" />
+    <meta property="og:type" content="website" />
+
+    {% comment %} <!-- Twitter Card Meta Tags --> {% endcomment %}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Notes - Free Educational Study Materials" />
+    <meta name="twitter:description" content="Access free handwritten notes for Physics, Chemistry, and Computer Science." />
+    <meta name="twitter:image" content="https://tpradeep.com.np/favicon.png" />
+
+    {% comment %} <!-- Favicon --> {% endcomment %}
+    <link rel="icon" href="https://tpradeep.com.np/favicon.png" type="image/x-icon" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="apple-touch-icon" href="favicon.png" />
+
+    {% comment %} <!-- Verification --> {% endcomment %}
+    <meta name="netpub_b2df84642260877000c5797d2bd54e91" content="b2df84642260877000c5797d2bd54e91_c1f64ab86a8e9eb58687b7b3e403bc39" />
+
+    {% comment %} <!-- Canonical URL --> {% endcomment %}
+    <link rel="canonical" href="https://tpradeep.com.np" />
+
+    {% comment %} <!-- Preconnect for Performance --> {% endcomment %}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    {% comment %} <!-- Google Fonts --> {% endcomment %}
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+    {% comment %} <!-- Font Awesome --> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    {% comment %} <!-- Custom CSS --> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+
+    {% comment %} <!-- Schema.org Structured Data --> {% endcomment %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "TP Pradeep Notes",
+        "description": "Free educational notes and study materials platform",
+        "url": "https://tpradeep.com.np",
+        "logo": "https://tpradeep.com.np/favicon.png",
+        "sameAs": [
+            "https://www.facebook.com/profile.php?id=61582696633793"
+        ],
+        "areaServed": "Worldwide",
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Educational Notes",
+            "itemListElement": [
+                {
+                    "@type": "Course",
+                    "name": "Physics Notes",
+                    "description": "High-quality handwritten physics notes"
+                },
+                {
+                    "@type": "Course",
+                    "name": "Chemistry Notes",
+                    "description": "High-quality handwritten chemistry notes"
+                },
+                {
+                    "@type": "Course",
+                    "name": "Computer Science Notes",
+                    "description": "High-quality handwritten computer science notes"
+                }
+            ]
+        }
+    }
+    </script>
+  </head>
+
+  <body>
+    {% comment %}Loading Animation {% endcomment %}
+    <div class="page-loader" id="pageLoader">
+      <div class="loader-content">
+        <div class="loader-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <div class="loader-text">Loading Notes...</div>
+      </div>
+    </div>
+
+    {% comment %} <!-- Header Section --> {% endcomment %}
+    {% block header %}
+    {% endblock header %}
+
+    {% comment %} <!--breadcrumb setion--> {% endcomment %}
+    {% block breadcrumb %}
+    {% endblock breadcrumb %}
+
+    {% comment %} <!-- Hero Section --> {% endcomment %}
+    {% block hero %}
+    {% endblock %}
+
+    {% comment %} Topics {% endcomment %}
+    {% block topics %}
+    {% endblock topics %}
+
+    {% comment %} <!-- Features Section --> {% endcomment %}
+    {% block features %}
+    {% endblock %}
+
+    {% comment %} <!-- Subjects Section --> {% endcomment %}
+    {% block subjects %}
+    {% endblock subjects %}
+
+    {% comment %} <!-- About Section --> {% endcomment %}
+    {% block about %}
+    {% endblock about %}
+    
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="section-header" data-aos="fade-up">
+          <span class="section-badge">Get in Touch</span>
+          <h2 class="section-title">Contact Us</h2>
+          <p class="section-description">Have questions or suggestions? We'd love to hear from you</p>
+        </div>
+
+        <div class="contact-content">
+          <div class="contact-info" data-aos="fade-right">
+            <div class="contact-card">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <h3>Email Us</h3>
+                <p>Send us your questions anytime</p>
+                <a href="/cdn-cgi/l/email-protection#3a5955544e5b594e7a54554e5f4914595557" class="contact-link"><span class="__cf_email__" data-cfemail="64070b0a10050710240a0b1001174a070b09">[email&#160;protected]</span></a>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-icon">
+                <i class="fab fa-facebook"></i>
+              </div>
+              <div>
+                <h3>Social Media</h3>
+                <p>Connect with us on Facebook</p>
+                <a href="https://www.facebook.com/profile.php?id=61582696633793" target="_blank" rel="noopener noreferrer" class="contact-link">Follow Us</a>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h3>Response Time</h3>
+                <p>We typically respond within 24 hours</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-container" data-aos="fade-left">
+            <form class="contact-form" id="contactForm" method="POST" action="/api/contact">
+              <div class="form-group">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required aria-required="true" />
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required aria-required="true" />
+              </div>
+
+              <div class="form-group">
+                <label for="subject">Subject *</label>
+                <input type="text" id="subject" name="subject" placeholder="What is this about?" required aria-required="true" />
+              </div>
+
+              <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" rows="5" placeholder="Share your thoughts, questions, or feedback..." required aria-required="true"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary submit-btn">
+                <span class="btn-text">Send Message</span>
+                <span class="btn-loading" style="display: none;"><i class="fas fa-spinner fa-spin"></i> Sending...</span>
+              </button>
+
+              <div class="form-message" id="formMessage" style="display: none;"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-column">
+            <div class="footer-logo">
+              <i class="fas fa-graduation-cap"></i>
+              <span>NOTES</span>
+            </div>
+            <p class="footer-description">Your trusted platform for high-quality educational notes and study materials. Making learning accessible to everyone.</p>
+            <div class="footer-social">
+              {% comment %} <a href="https://www.facebook.com/profile.php?id=61582696633793" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a> {% endcomment %}
+            </div>
+          </div>
+
+          <div class="footer-column">
+            <h3 class="footer-title">Quick Links</h3>
+            <ul class="footer-links">
+              <li>
+                <a href="#home">Home</a>
+              </li>
+              <li>
+                <a href="#subjects">Subjects</a>
+              </li>
+              <li>
+                <a href="#features">Features</a>
+              </li>
+              <li>
+                <a href="#about">About Us</a>
+              </li>
+              <li>
+                <a href="#contact">Contact</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h3 class="footer-title">Subjects</h3>
+            <ul class="footer-links">
+              <li>
+                <a href="physics.html">Physics Notes</a>
+              </li>
+              <li>
+                <a href="chem.html">Chemistry Notes</a>
+              </li>
+              <li>
+                <a href="comp.html">Computer Science Notes</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h3 class="footer-title">Legal</h3>
+            <ul class="footer-links">
+              <li>
+                <a href="privacy.html">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="term.html">Terms & Conditions</a>
+              </li>
+              <li>
+                <a href="#" id="cookieSettings">Cookie Settings</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 <strong>Notes</strong>. All rights reserved.
+          </p>
+          <p>
+            Made with <i class="fas fa-heart"></i> for students worldwide
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+  </body>
+</html>

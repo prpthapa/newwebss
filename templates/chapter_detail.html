@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+<header class="header" id="header">
+  <div class="container">
+    <a href="{% url 'index' %}" class="logo" aria-label="Notes Home">
+      <i class="fas fa-graduation-cap"></i>
+      <span>NOTES</span>
+    </a>
+
+    <nav class="navbar" id="navbar">
+      <ul>
+        <li>
+          <a href="{% url 'index' %}#home" class="nav-link">Home</a>
+        </li>
+        <li>
+          <a href="{% url 'index' %}#subjects" class="nav-link">Subjects</a>
+        </li>
+        <li>
+          <a href="{% url 'index' %}#features" class="nav-link">Features</a>
+        </li>
+        <li>
+          <a href="{% url 'index' %}#about" class="nav-link">About</a>
+        </li>
+        <li>
+          <a href="{% url 'index' %}#contact" class="nav-link">Contact</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+{% endblock header %}
+
+{% block breadcrumb %}
+<section class="breadcrumb-section">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
+      <span class="separator">/</span>
+      <a href="{% url 'subject_detail' subject.slug %}">{{ subject.name }}</a>
+      <span class="separator">/</span>
+      <span class="current">Chapter {{ chapter.chapter_number }}</span>
+    </nav>
+  </div>
+</section>
+{% endblock breadcrumb %}
+
+{% block hero %}
+<section class="subject-hero">
+  <div class="container">
+    <div class="subject-hero-content" data-aos="fade-up">
+      <div class="subject-hero-icon">
+        <i class="{{ subject.icon_class }}"></i>
+      </div>
+      <h1 class="subject-hero-title">Chapter {{ chapter.chapter_number }}: {{ chapter.title }}</h1>
+      <p class="subject-hero-description">{{ chapter.description }}</p>
+      <div class="subject-stats">
+        <div class="stat-item">
+          <i class="fas fa-list"></i>
+          <span>{{ topics.count }} Topic{{ topics.count|pluralize }}</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-file-alt"></i>
+          <span>{{ chapter.get_notes_count }} Note{{ chapter.get_notes_count|pluralize }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block topics %}
+<section class="chapters-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-badge">Study Topics</span>
+      <h2 class="section-title">Available Topics</h2>
+      <p class="section-description">Select a topic to view detailed notes and study materials</p>
+    </div>
+
+    {% if topics %}
+    <div class="chapters-grid" id="topicsGrid">
+      {% for topic in topics %}
+      <article class="chapter-card {% if forloop.counter > 3 %}hidden-topic{% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1|stringformat:'d' }}00">
+        <a href="{% url 'topic_detail' subject.slug chapter.slug topic.slug %}" class="chapter-link">
+          <div class="chapter-card-header">
+            {% if topic.thumbnail %}
+            <img src="{{ topic.thumbnail.url }}" alt="{{ topic.title }}" class="chapter-thumbnail" loading="lazy" />
+            {% else %}
+            <div class="chapter-thumbnail-placeholder">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            {% endif %}
+            <div class="chapter-number-badge">Topic {{ topic.topic_number }}</div>
+          </div>
+          
+          <div class="chapter-card-body">
+            <h3 class="chapter-title">{{ topic.title }}</h3>
+            {% if topic.description %}
+            <p class="chapter-description">{{ topic.description|truncatewords:20 }}</p>
+            {% endif %}
+            
+            <div class="chapter-meta">
+              <span class="chapter-notes-count">
+                <i class="fas fa-file-image"></i>
+                {{ topic.get_notes_count }} Note{{ topic.get_notes_count|pluralize }}
+              </span>
+            </div>
+            
+            <div class="chapter-action">
+              <span class="view-notes-btn">
+                View Notes
+                <i class="fas fa-arrow-right"></i>
+              </span>
+            </div>
+          </div>
+        </a>
+      </article>
+      {% endfor %}
+    </div>
+    
+    {% if topics.count > 3 %}
+    <div class="show-more-container" data-aos="fade-up">
+      <button class="show-more-btn" id="showMoreTopics">
+        <span class="show-more-text">Show More Topics</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="no-chapters" data-aos="fade-up">
+      <i class="fas fa-lightbulb"></i>
+      <p>No topics available yet. Check back soon!</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock topics %}

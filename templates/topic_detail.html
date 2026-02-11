@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+<header class="header" id="header">
+  <div class="container">
+    <a href="{% url 'index' %}" class="logo" aria-label="Notes Home">
+      <i class="fas fa-graduation-cap"></i>
+      <span>NOTES</span>
+    </a>
+
+    <nav class="navbar" id="navbar">
+      <ul>
+        <li>
+          <a href="{% url 'index' %}#home" class="nav-link">Home</a>
+        </li>
+        <li>
+          <a href="{% url 'index' %}#subjects" class="nav-link">Subjects</a>
+        </li>
+        <li>
+          <a href="{% url 'index' %}#features" class="nav-link">Features</a>
+        </li>
+        <li>
+          <a href="{% url 'index' %}#about" class="nav-link">About</a>
+        </li>
+        <li>
+          <a href="{% url 'index' %}#contact" class="nav-link">Contact</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+{% endblock header %}
+
+{% block breadcrumb %}
+<section class="breadcrumb-section">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
+      <span class="separator">/</span>
+      <a href="{% url 'subject_detail' subject.slug %}">{{ subject.name }}</a>
+      <span class="separator">/</span>
+      <a href="{% url 'chapter_detail' subject.slug chapter.slug %}">Chapter {{ chapter.chapter_number }}</a>
+      <span class="separator">/</span>
+      <span class="current">Topic {{ topic.topic_number }}</span>
+    </nav>
+  </div>
+</section>
+{% endblock breadcrumb %}
+
+{% block hero %}
+<section class="chapter-hero">
+  <div class="container">
+    <div class="chapter-hero-content" data-aos="fade-up">
+      <div class="chapter-badge">Topic {{ topic.topic_number }}</div>
+      <h1 class="chapter-hero-title">{{ topic.title }}</h1>
+      {% if topic.description %}
+      <p class="chapter-hero-description">{{ topic.description }}</p>
+      {% endif %}
+      <div class="chapter-hero-meta">
+        <span><i class="fas fa-book"></i> {{ chapter.title }}</span>
+        <span><i class="fas fa-file-image"></i> {{ notes.count }} Page{{ notes.count|pluralize }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block topics %}
+<section class="notes-viewer-section">
+  <div class="container">
+    {% if notes %}
+    <div class="notes-controls" data-aos="fade-up">
+      <div class="notes-navigation">
+        <button id="prevNote" class="nav-btn" aria-label="Previous note">
+          <i class="fas fa-chevron-left"></i> Previous
+        </button>
+        <span class="page-indicator">
+          Page <span id="currentPage">1</span> of <span id="totalPages">{{ notes.count }}</span>
+        </span>
+        <button id="nextNote" class="nav-btn" aria-label="Next note">
+          Next <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      
+      <div class="view-controls">
+        <button id="toggleFullscreen" class="control-btn" aria-label="Toggle fullscreen">
+          <i class="fas fa-expand"></i>
+        </button>
+        <button id="zoomIn" class="control-btn" aria-label="Zoom in">
+          <i class="fas fa-search-plus"></i>
+        </button>
+        <button id="zoomOut" class="control-btn" aria-label="Zoom out">
+          <i class="fas fa-search-minus"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="notes-viewer" id="notesViewer" data-aos="fade-up" data-aos-delay="100">
+      <div class="note-container" id="noteContainer">
+        {% for note in notes %}
+        <div class="note-image-wrapper {% if forloop.first %}active{% endif %}" 
+             data-note-id="{{ note.id }}"
+             data-page="{{ forloop.counter }}"
+             data-image-url="{{ note.image.url }}"
+             data-title="{{ note.title }}">
+          <img src="{{ note.image.url }}" 
+               alt="{{ note.title }}" 
+               class="note-image"
+               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" />
+          <div class="note-info">
+            <h3>{{ note.title }}</h3>
+            {% if note.description %}
+            <p>{{ note.description }}</p>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Thumbnail Navigation -->
+    <div class="thumbnail-strip" data-aos="fade-up" data-aos-delay="200">
+      <div class="thumbnail-container" id="thumbnailContainer">
+        {% for note in notes %}
+        <div class="thumbnail {% if forloop.first %}active{% endif %} {% if forloop.counter > 6 %}hidden-thumbnail{% endif %}" 
+             data-page="{{ forloop.counter }}"
+             onclick="goToPage({{ forloop.counter }})">
+          <img src="{{ note.image.url }}" alt="Page {{ forloop.counter }}" loading="lazy" />
+          <span class="thumbnail-number">{{ forloop.counter }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      
+      {% if notes.count > 6 %}
+      <div class="thumbnail-show-more">
+        <button class="show-more-thumbnails-btn" id="showMoreThumbnails">
+          <span class="show-more-text">Show All Pages ({{ notes.count }})</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+      {% endif %}
+    </div>
+
+    {% else %}
+    <div class="no-notes" data-aos="fade-up">
+      <i class="fas fa-file-image"></i>
+      <p>No notes available for this chapter yet.</p>
+      <a href="{% url 'subject_detail' subject.slug %}" class="btn btn-primary">
+        <i class="fas fa-arrow-left"></i> Back to Chapters
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock topics %}
+

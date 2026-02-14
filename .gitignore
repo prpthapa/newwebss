@@ -1,36 +1,13 @@
-# Python
-*.py[cod]
-*$py.class
-*.so
-.Python
-__pycache__/
+chmod +x build.sh
+```
+
+### **1.4 Create `.gitignore`**
+```
 *.pyc
-
-# Django
-*.log
+__pycache__/
 db.sqlite3
-db.sqlite3-journal
-/staticfiles/
-/media/
-
-# Virtual Environment
-venv/
-env/
-ENV/
-.venv
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Environment variables
 .env
-.env.local
-
+venv/
+staticfiles/
+media/
+*.log

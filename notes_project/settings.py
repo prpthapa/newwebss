@@ -52,10 +52,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'notes_project.wsgi.application'
 
 DATABASES = {
-    'default':dj_database_url.config(
-        default=config('DATABASE_URL', default=f'   sqlite:///{BASE_DIR / "db.sqlite3"}'))
-    }
-
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+    )
+}
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},

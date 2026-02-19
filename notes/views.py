@@ -6,6 +6,13 @@ from django.conf import settings
 from .models import Subject, Chapter, Topic, Note, ContactMessage
 import json
 
+def index(request):
+    try:
+        subjects = Subject.objects.filter(is_active=True).prefetch_related('chapters')
+        return render(request, 'index.html', {'subjects': subjects})
+    except Exception as e:
+        from django.http import HttpResponse
+        return HttpResponse(f"Error: {str(e)}")
 
 def index(request):
     """

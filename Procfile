@@ -1,1 +1,2 @@
-web: gunicorn notes_project.wsgi:application
+release: python manage.py migrate && python manage.py collectstatic --noinput
+web: gunicorn notes_project.wsgi

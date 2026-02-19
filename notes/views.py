@@ -5,6 +5,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Subject, Chapter, Topic, Note, ContactMessage
 import json
+from django.http import HttpResponse
+
 
 def index(request):
     try:
@@ -14,7 +16,6 @@ def index(request):
         }
         return render(request, 'index.html', context)
     except Exception as e:
-        from django.http import HttpResponse
         return HttpResponse(f"Error: {str(e)}")
     
 

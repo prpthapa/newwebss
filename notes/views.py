@@ -9,21 +9,14 @@ import json
 def index(request):
     try:
         subjects = Subject.objects.filter(is_active=True).prefetch_related('chapters')
-        return render(request, 'index.html', {'subjects': subjects})
+        context = {
+            'subjects': subjects,
+        }
+        return render(request, 'index.html', context)
     except Exception as e:
         from django.http import HttpResponse
         return HttpResponse(f"Error: {str(e)}")
-
-def index(request):
-    """
-    Home page view
-    """
-    subjects = Subject.objects.filter(is_active=True).prefetch_related('chapters')
-    context = {
-        'subjects': subjects,
-    }
-    return render(request, 'index.html', context)
-
+    
 
 def subject_detail(request, slug):
     """

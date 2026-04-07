@@ -1,11 +1,39 @@
-
-### **1.4 Create `.gitignore`**
-```
+# Byte-compiled / optimized / DLL files
 *.pyc
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Django stuff
 db.sqlite3
+db.sqlite3-journal
+*.log
+local_settings.py
+
+# Environment
 .env
 venv/
-staticfiles/
-media/
-*.log
+.venv/
+
+# Static and media (optional - uncomment to ignore)
+# staticfiles/
+# media/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage and testing
+.coverage
+htmlcov/
+.pytest_cache/

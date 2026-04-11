@@ -21,9 +21,9 @@ local_settings.py
 venv/
 .venv/
 
-# Static and media (optional - uncomment to ignore)
-# staticfiles/
-# media/
+# Static and media
+staticfiles/
+media/
 
 # IDE
 .vscode/

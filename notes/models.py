@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import FileExtensionValidator
+from cloudinary.models import CloudinaryField
 
 
 class Subject(models.Model):
@@ -10,8 +11,9 @@ class Subject(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     description = models.TextField(help_text="Brief description of the subject")
-    preview_image = models.FileField(
-        upload_to='subjects/',
+    preview_image = CloudinaryField(
+        'image',
+        folder='notes/subjects',
         blank=True,
         null=True,
         help_text="Preview image for the subject card (PNG, JPG, SVG)"
@@ -68,8 +70,9 @@ class Chapter(models.Model):
     chapter_number = models.IntegerField(
         help_text="Chapter number for ordering (e.g., 1, 2, 3)"
     )
-    thumbnail = models.FileField(
-        upload_to='chapters/',
+    thumbnail = CloudinaryField(
+        'image',
+        folder='notes/chapters',
         blank=True,
         null=True,
         help_text="Thumbnail image for the chapter (PNG, JPG, SVG)"
@@ -117,8 +120,9 @@ class Topic(models.Model):
     topic_number = models.IntegerField(
         help_text="Topic number for ordering (e.g., 1, 2, 3)"
     )
-    thumbnail = models.FileField(
-        upload_to='topics/',
+    thumbnail = CloudinaryField(
+        'image',
+        folder='notes/topics',
         blank=True,
         null=True,
         help_text="Thumbnail image for the topic"
@@ -158,8 +162,9 @@ class Note(models.Model):
         max_length=200,blank=True,
         help_text="Title or description of the note"
     )
-    image = models.ImageField(
-        upload_to='notes/%Y/%m/',
+    image = CloudinaryField(
+        'image',
+        folder='notes/uploads',
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp'])],
         help_text="Upload note image (JPG, PNG, or WebP)"
     )

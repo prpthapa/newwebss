@@ -2,11 +2,14 @@ import os
 from pathlib import Path
 from decouple import config
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG')
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
 
 INSTALLED_APPS = [
@@ -78,6 +81,19 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Cloudinary configuration
+cloudinary.config(
+    cloud_name=config('CLOUDINARY_CLOUD_NAME', default=''),
+    api_key=config('CLOUDINARY_API_KEY', default=''),
+    api_secret=config('CLOUDINARY_API_SECRET', default=''),
+    secure=True
+)
+
+# Use Cloudinary for media storage in production
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    MEDIA_URL = 'https://res.cloudinary.com/' + config('CLOUDINARY_CLOUD_NAME', default='') + '/image/upload/'
+
 # Security settings for production
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
@@ -89,3 +105,4 @@ if not DEBUG:
     X_FRAME_OPTIONS = 'DENY'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

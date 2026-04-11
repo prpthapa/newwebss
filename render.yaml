@@ -17,20 +17,6 @@ services:
       - key: ALLOWED_HOSTS
         value: "*"
       - key: DATABASE_URL
-        fromDatabase:
-          name: notes-db
-          property: connectionString
+        generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
-      - key: CLOUDINARY_CLOUD_NAME
-        value: ''
-      - key: CLOUDINARY_API_KEY
-        value: ''
-      - key: CLOUDINARY_API_SECRET
-        value: ''
-
-databases:
-  - name: notes-db
-    databaseName: notesdb
-    user: notesuser
-    plan: free

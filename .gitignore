@@ -38,4 +38,5 @@ Thumbs.db
 htmlcov/
 .pytest_cache/
 
-.claude
+.claude/
+**/.claude/

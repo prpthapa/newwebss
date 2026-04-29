@@ -59,7 +59,6 @@ notes_project/
 
 - Python 3.12+
 - PostgreSQL (or SQLite for development)
-- Cloudinary account (for image hosting)
 
 ### Setup
 
@@ -88,16 +87,6 @@ notes_project/
    SECRET_KEY=your-secret-key-here
    DEBUG=True
    ALLOWED_HOSTS=localhost,127.0.0.1
-   
-   # Database (PostgreSQL recommended for production)
-   DATABASE_URL=postgresql://user:password@localhost:5432/notes_db
-   
-   # Cloudinary (get from https://cloudinary.com)
-   CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name
-   
-   # Email (optional, for contact form)
-   EMAIL_HOST_USER=your-email@gmail.com
-   EMAIL_HOST_PASSWORD=your-app-password
    ```
 
 5. **Run migrations**
@@ -133,16 +122,6 @@ pip install gunicorn whitenoise
 gunicorn notes_project.wsgi:application
 ```
 
-### Environment Variables for Production
-
-```env
-DEBUG=False
-ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
-SECRET_KEY=<strong-random-secret>
-DATABASE_URL=<production-database-url>
-CLOUDINARY_URL=<cloudinary-url>
-```
-
 ## API Endpoints
 
 | Endpoint | Method | Description |
@@ -155,39 +134,17 @@ CLOUDINARY_URL=<cloudinary-url>
 - **Rich Admin Interface** - Custom admin views with image previews
 - **Bulk Upload** - Upload multiple notes at once via `/admin/bulk-upload-notes/`
 - **Inline Editing** - Edit chapters within subjects, topics within chapters
-- **View Statistics** - Track note views in admin dashboard
 
 ## Technology Stack
 
 - **Backend**: Django 6.0.2, Django REST Framework 3.16.1
 - **Database**: PostgreSQL (production), SQLite (development)
-- **Image Storage**: Cloudinary
 - **Static Files**: WhiteNoise
 - **Server**: Gunicorn
 - **Frontend**: HTML5, CSS3, JavaScript, AOS Animations, Font Awesome
 
-## Configuration
 
-### Cloudinary Setup
 
-1. Sign up at [Cloudinary](https://cloudinary.com)
-2. Get your API credentials from Dashboard
-3. Add to `.env`:
-   ```env
-   CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>
-   ```
-
-### Email Setup (for contact form)
-
-For Gmail:
-```env
-EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-```
 
 ## License
 
@@ -201,4 +158,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 For issues and questions:
 - Create an issue on GitHub
-- Contact: admin@tpradeep.com.np
+- Contact: pdpthapa1515@gmail.com

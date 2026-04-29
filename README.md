@@ -143,13 +143,6 @@ gunicorn notes_project.wsgi:application
 - **Server**: Gunicorn
 - **Frontend**: HTML5, CSS3, JavaScript, AOS Animations, Font Awesome
 
-
-
-
-## License
-
-MIT License - See LICENSE file for details.
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

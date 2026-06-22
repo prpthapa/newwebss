@@ -70,6 +70,13 @@ USE_I18N = True
 USE_TZ = True
 
 
+# --- Studio (private /studio/ section) ---
+# Hardcoded credentials kept off Django's auth so they don't interact with admin
+# or user accounts. Configure via .env — no defaults, so a missing entry fails loud.
+STUDIO_USERNAME = config('STUDIO_USERNAME')
+STUDIO_PASSWORD = config('STUDIO_PASSWORD')
+
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'

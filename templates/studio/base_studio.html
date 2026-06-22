@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Studio{% endblock %} · Notes Studio</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+
+  <style>
+    /* Studio-only minimal chrome on top of the public style.css. */
+    body { background: #0d0d12; color: #f0f0f5; }
+    .studio-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+    .studio-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; border: 1px solid #1f1f2a; border-radius: 12px;
+      background: #14141c; margin-bottom: 24px;
+    }
+    .studio-topbar .brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: .04em; }
+    .studio-topbar nav a {
+      color: #b0b0c0; text-decoration: none; margin-right: 18px; font-size: .95rem;
+    }
+    .studio-topbar nav a:hover, .studio-topbar nav a.active { color: #fff; }
+    .studio-topbar .who { color: #8a8a9a; font-size: .85rem; }
+    .studio-topbar form { display: inline; }
+    .studio-topbar .logout-btn {
+      background: none; border: 1px solid #2a2a3a; color: #b0b0c0;
+      padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: .85rem;
+    }
+    .studio-topbar .logout-btn:hover { color: #fff; border-color: #4a4a6a; }
+
+    .studio-card {
+      background: #14141c; border: 1px solid #1f1f2a; border-radius: 12px;
+      padding: 24px; margin-bottom: 20px;
+    }
+    .studio-card h2 { font-family: 'Syne', sans-serif; margin-top: 0; margin-bottom: 12px; }
+    .studio-card h3 { font-family: 'Syne', sans-serif; margin-top: 0; }
+
+    .studio-messages { margin-bottom: 18px; }
+    .studio-messages .msg {
+      padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; font-size: .92rem;
+    }
+    .studio-messages .msg.error { background: #2a1418; color: #ffb4b8; border: 1px solid #4a1a22; }
+    .studio-messages .msg.success { background: #142a18; color: #b4ffb8; border: 1px solid #1a4a22; }
+
+    .studio-form .form-row { margin-bottom: 16px; }
+    .studio-form label { display: block; margin-bottom: 6px; font-size: .9rem; color: #c0c0d0; }
+    .studio-form input[type="text"],
+    .studio-form input[type="password"],
+    .studio-form input[type="number"],
+    .studio-form input[type="file"],
+    .studio-form select,
+    .studio-form textarea {
+      width: 100%; max-width: 480px; padding: 10px 12px;
+      background: #0d0d12; color: #f0f0f5; border: 1px solid #2a2a3a; border-radius: 8px;
+      font-family: inherit; font-size: .95rem;
+    }
+    .studio-form textarea { min-height: 80px; }
+    .studio-form .help { display: block; color: #8a8a9a; font-size: .8rem; margin-top: 4px; }
+    .studio-form .errors { color: #ffb4b8; font-size: .85rem; margin-top: 4px; }
+    .studio-form .err { color: #ffb4b8; font-size: .85rem; margin-top: 4px; }
+
+    .btn {
+      display: inline-block; padding: 10px 18px; border-radius: 8px; font-size: .95rem;
+      border: 1px solid transparent; cursor: pointer; text-decoration: none; font-family: inherit;
+    }
+    .btn-primary { background: #5b6cff; color: #fff; }
+    .btn-primary:hover { background: #6f7fff; }
+    .btn-ghost { background: transparent; color: #c0c0d0; border-color: #2a2a3a; }
+    .btn-ghost:hover { color: #fff; border-color: #4a4a6a; }
+
+    .studio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+    .studio-stat {
+      background: #14141c; border: 1px solid #1f1f2a; border-radius: 12px; padding: 18px;
+    }
+    .studio-stat .num { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; }
+    .studio-stat .lbl { color: #8a8a9a; font-size: .85rem; }
+
+    .studio-tree, .studio-tree ul { list-style: none; padding-left: 18px; }
+    .studio-tree > li { padding-left: 0; }
+    .studio-tree li { margin: 4px 0; color: #b0b0c0; font-size: .92rem; }
+    .studio-tree .node-subject { color: #fff; font-weight: 700; }
+    .studio-tree .node-chapter { color: #c0c0d0; }
+    .studio-tree .node-topic { color: #8a8aa0; }
+    .studio-tree .actions { margin-left: 6px; color: #6a6a80; font-size: .8rem; }
+    .studio-tree .actions a { color: #6f7fff; text-decoration: none; margin-left: 6px; }
+    .studio-tree .actions a:hover { text-decoration: underline; }
+
+    .recent-notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+    .recent-notes .note-thumb {
+      aspect-ratio: 3 / 4; background: #1a1a26 center/cover no-repeat; border-radius: 6px;
+      border: 1px solid #2a2a3a;
+    }
+    .recent-notes .note-meta { font-size: .75rem; color: #8a8a9a; margin-top: 4px; }
+
+    .login-card { max-width: 380px; margin: 80px auto; }
+  </style>
+</head>
+<body>
+  <div class="studio-wrap">
+    {% if request.session.studio_authed %}
+    <div class="studio-topbar">
+      <div class="brand"><i class="fas fa-feather-alt"></i> Notes Studio</div>
+      <nav>
+        <a href="{% url 'studio:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="{% url 'studio:upload' %}" class="{% if request.resolver_match.url_name == 'upload' %}active{% endif %}">Upload</a>
+        <a href="{% url 'studio:new_subject' %}" class="{% if request.resolver_match.url_name == 'new_subject' %}active{% endif %}">+ Subject</a>
+        <a href="{% url 'studio:new_chapter' %}" class="{% if request.resolver_match.url_name == 'new_chapter' %}active{% endif %}">+ Chapter</a>
+        <a href="{% url 'studio:new_topic' %}" class="{% if request.resolver_match.url_name == 'new_topic' %}active{% endif %}">+ Topic</a>
+      </nav>
+      <div>
+        <span class="who"><i class="fas fa-user-circle"></i> {{ request.session.studio_user|default:"owner" }}</span>
+        <form method="post" action="{% url 'studio:logout' %}" style="display:inline; margin-left:10px;">
+          {% csrf_token %}
+          <button class="logout-btn" type="submit">Log out</button>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if messages %}
+    <div class="studio-messages">
+      {% for message in messages %}
+        <div class="msg {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

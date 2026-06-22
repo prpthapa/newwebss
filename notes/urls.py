@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from .bulk_upload import bulk_upload_notes
 
@@ -26,7 +26,10 @@ urlpatterns = [
     
     # Bulk upload (admin only)
     path('bulk-upload-notes/', bulk_upload_notes, name='admin_bulk_upload_notes'),
-    
+
+    # Private studio section
+    path('studio/', include('notes.studio_urls')),
+
     # API endpoints
     path('api/contact/', views.contact_submit, name='contact_submit'),
     path('api/note/<int:note_id>/view/', views.increment_note_view, name='increment_note_view'),

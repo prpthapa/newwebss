@@ -1,0 +1,33 @@
+{% extends 'studio/base_studio.html' %}
+
+{% block title %}New {{ kind }}{% endblock %}
+
+{% block content %}
+<div class="studio-card">
+  <h2>
+    {% if kind == 'subject' %}<i class="fas fa-book"></i> New subject{% endif %}
+    {% if kind == 'chapter' %}<i class="fas fa-bookmark"></i> New chapter{% endif %}
+    {% if kind == 'topic' %}<i class="fas fa-file-alt"></i> New topic{% endif %}
+  </h2>
+
+  <form method="post" enctype="multipart/form-data" class="studio-form">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% for field in form %}
+      <div class="form-row">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<span class="help">{{ field.help_text }}</span>{% endif %}
+        {% if field.errors %}<div class="errors">{{ field.errors }}</div>{% endif %}
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+    <a href="{% url 'studio:dashboard' %}" class="btn btn-ghost" style="margin-left:8px;">Cancel</a>
+  </form>
+</div>
+{% endblock %}

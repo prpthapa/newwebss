@@ -1,0 +1,45 @@
+# Render Blueprint for the Notes site.
+# Apply from the Render dashboard ("New" → "Blueprint" → point at this repo)
+# or run `render blueprint launch` from the Render CLI.
+
+services:
+  - type: web
+    name: notes
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn notes_project.wsgi:application --log-file -"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: WEB_CONCURRENCY
+        value: "3"
+      - key: SECRET_KEY
+        generateValue: true   # Render generates a random SECRET_KEY on first deploy.
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "tpradeep.com.np,www.tpradeep.com.np"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://tpradeep.com.np,https://www.tpradeep.com.np"
+      - key: STUDIO_USERNAME
+        sync: false           # Must be set manually in the dashboard.
+      - key: STUDIO_PASSWORD
+        sync: false           # Must be set manually in the dashboard.
+      - key: CONTACT_NOTIFICATION_EMAIL
+        value: "pdpthapa1515@gmail.com"
+      - key: EMAIL_BACKEND
+        value: "django.core.mail.backends.console.EmailBackend"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: notes-db
+          property: connectionString
+      - key: PYTHONUNBUFFERED
+        value: "1"            # Make gunicorn logs land in Render's log stream immediately.
+
+databases:
+  - name: notes-db
+    plan: free
+    databaseName: notes
+    user: notes

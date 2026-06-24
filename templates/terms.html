@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Terms of Service · Notes{% endblock %}
+
+{% block header %}
+<header class="header" id="header">
+  <div class="container">
+    <a href="{% url 'index' %}" class="logo" aria-label="Notes Home">
+      <i class="fas fa-graduation-cap"></i>
+      <span>NOTES</span>
+    </a>
+    <nav class="navbar" id="navbar">
+      <ul>
+        <li><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+        <li><a href="{% url 'index' %}#subjects" class="nav-link">Subjects</a></li>
+        <li><a href="{% url 'index' %}#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+
+{% block topics %}
+<section class="legal-section">
+  <div class="container">
+    <div class="legal-content" data-aos="fade-up">
+      <h1 class="legal-title">Terms of Service</h1>
+      <p class="legal-meta">Last updated: 2026-06-24</p>
+
+      <p>
+        This page is a placeholder. The operator of this site should replace
+        this copy with real terms describing acceptable use, intellectual
+        property, disclaimers, and governing law.
+      </p>
+
+      <h2>Acceptable use</h2>
+      <p>
+        Notes are provided free of charge for personal educational use. Do
+        not scrape the site, republish the notes elsewhere, or attempt to
+        disrupt the service for other users.
+      </p>
+
+      <h2>Intellectual property</h2>
+      <p>
+        Unless otherwise noted, the notes are the work of the site operator.
+        Linking back to the original page is appreciated.
+      </p>
+
+      <h2>Disclaimer</h2>
+      <p>
+        The notes are provided "as is" without warranty of any kind. The
+        site operator is not responsible for any errors in the content or for
+        decisions made based on the content (e.g. exam answers).
+      </p>
+
+      <h2>Contact</h2>
+      <p>Terms questions: <a href="mailto:pdpthapa1515@gmail.com">pdpthapa1515@gmail.com</a></p>
+    </div>
+  </div>
+</section>
+{% endblock topics %}

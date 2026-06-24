@@ -10,9 +10,9 @@ from .bulk_upload import bulk_create_notes
 from .models import Subject, Chapter, Topic, Note
 from .studio_auth import (
     SESSION_KEY,
-    get_studio_creds,
-    studio_login_required,
+    check_studio_credentials,
     do_studio_logout,
+    studio_login_required,
 )
 from .studio_forms import (
     BulkUploadForm,
@@ -37,14 +37,13 @@ def studio_login(request):
     if request.method == 'POST':
         username = (request.POST.get('username') or '').strip()
         password = request.POST.get('password') or ''
-        expected_user, expected_pass = get_studio_creds()
-        if username == expected_user and password == expected_pass:
+        ok, error = check_studio_credentials(request, username, password)
+        if ok:
             request.session[SESSION_KEY] = True
             # Cycle the session key after privilege change to prevent fixation.
             request.session.cycle_key()
             next_url = request.POST.get('next') or reverse('studio:dashboard')
             return redirect(next_url)
-        error = 'Invalid username or password.'
 
     return render(request, 'studio/login.html', {
         'next': request.GET.get('next', ''),

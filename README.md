@@ -83,10 +83,11 @@ notes_project/
    ```
 
 4. **Create `.env` file**
-   ```env
-   SECRET_KEY=your-secret-key-here
-   DEBUG=True
-   ALLOWED_HOSTS=localhost,127.0.0.1
+   ```bash
+   cp .env.example .env
+   # Edit .env and replace the placeholders with real values.
+   # Generate a SECRET_KEY with:
+   #   python -c "import secrets; print(secrets.token_urlsafe(50))"
    ```
 
 5. **Run migrations**
@@ -116,11 +117,33 @@ The project uses **Gunicorn** as the WSGI server and **WhiteNoise** for static f
 
 ```bash
 # Install production dependencies
-pip install gunicorn whitenoise
+pip install -r requirements.txt
 
 # Run with Gunicorn
 gunicorn notes_project.wsgi:application
 ```
+
+### Deploying to Render
+
+The repository includes a `render.yaml` Blueprint and a `build.sh` script. To deploy:
+
+1. In the Render dashboard: **New** → **Blueprint** → connect this repo.
+2. Render will create the Postgres database and web service automatically.
+3. After the first deploy finishes, set the `STUDIO_USERNAME` and `STUDIO_PASSWORD` env vars manually in the web service's **Environment** tab (the Blueprint leaves them `sync: false` for security).
+4. Create a Django admin user once via the Render shell:
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+The default gunicorn config (see `gunicorn.conf.py`) honours Render's `PORT` env var and runs 3 workers on the free tier. Logs stream to stdout, which Render's log drainer captures.
+
+### Rotate the historical SECRET_KEY
+
+> **Heads up:** an older version of this repository had a real-looking `SECRET_KEY` value committed to `.env` for local development. If you forked/cloned the project before the hardening PR, rotate the key:
+>
+> 1. Generate a fresh one: `python -c "import secrets; print(secrets.token_urlsafe(50))"`
+> 2. Set it in Render's env-var UI (the `SECRET_KEY` row will be regenerated automatically on the next deploy, but you can paste your own value to keep it stable).
+> 3. Any existing sessions, password reset links, or signed cookies will be invalidated — that's expected.
 
 ## API Endpoints
 

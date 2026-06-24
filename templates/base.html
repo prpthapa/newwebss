@@ -28,8 +28,7 @@
 
     {% comment %} <!-- Favicon --> {% endcomment %}
     <link rel="icon" href="https://tpradeep.com.np/favicon.png" type="image/x-icon" />
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link rel="apple-touch-icon" href="favicon.png" />
+    <link rel="apple-touch-icon" href="https://tpradeep.com.np/favicon.png" />
 
     {% comment %} <!-- Verification --> {% endcomment %}
     <meta name="netpub_b2df84642260877000c5797d2bd54e91" content="b2df84642260877000c5797d2bd54e91_c1f64ab86a8e9eb58687b7b3e403bc39" />
@@ -145,7 +144,7 @@
               <div>
                 <h3>Email Us</h3>
                 <p>Send us your questions anytime</p>
-                <a href="/cdn-cgi/l/email-protection#3a5955544e5b594e7a54554e5f4914595557" class="contact-link"><span class="__cf_email__" data-cfemail="64070b0a10050710240a0b1001174a070b09">[email&#160;protected]</span></a>
+                <a href="mailto:pdpthapa1515@gmail.com" class="contact-link">pdpthapa1515@gmail.com</a>
               </div>
             </div>
 
@@ -173,6 +172,7 @@
 
           <div class="contact-form-container" data-aos="fade-left">
             <form class="contact-form" id="contactForm" method="POST" action="/api/contact">
+              {% csrf_token %}
               <div class="form-group">
                 <label for="name">Full Name *</label>
                 <input type="text" id="name" name="name" placeholder="Enter your full name" required aria-required="true" />
@@ -263,10 +263,10 @@
             <h3 class="footer-title">Legal</h3>
             <ul class="footer-links">
               <li>
-                <a href="privacy.html">Privacy Policy</a>
+                <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
               </li>
               <li>
-                <a href="term.html">Terms & Conditions</a>
+                <a href="{% url 'terms_of_service' %}">Terms &amp; Conditions</a>
               </li>
               <li>
                 <a href="#" id="cookieSettings">Cookie Settings</a>

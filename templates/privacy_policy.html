@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Privacy Policy · Notes{% endblock %}
+
+{% block header %}
+<header class="header" id="header">
+  <div class="container">
+    <a href="{% url 'index' %}" class="logo" aria-label="Notes Home">
+      <i class="fas fa-graduation-cap"></i>
+      <span>NOTES</span>
+    </a>
+    <nav class="navbar" id="navbar">
+      <ul>
+        <li><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+        <li><a href="{% url 'index' %}#subjects" class="nav-link">Subjects</a></li>
+        <li><a href="{% url 'index' %}#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+
+{% block topics %}
+<section class="legal-section">
+  <div class="container">
+    <div class="legal-content" data-aos="fade-up">
+      <h1 class="legal-title">Privacy Policy</h1>
+      <p class="legal-meta">Last updated: 2026-06-24</p>
+
+      <p>
+        This page is a placeholder. The operator of this site should replace
+        this copy with a real privacy policy that describes what data is
+        collected (e.g. contact form submissions, anonymous view counts),
+        how long it's retained, and how to request deletion.
+      </p>
+
+      <h2>What we collect</h2>
+      <ul>
+        <li>Contact-form submissions (name, email, subject, message).</li>
+        <li>Anonymous page-view counts on individual note images.</li>
+        <li>Standard server logs (IP, user-agent, timestamp) used for abuse prevention.</li>
+      </ul>
+
+      <h2>How we use it</h2>
+      <p>
+        Submitted messages are used to respond to inquiries. View counts are
+        used to understand which notes are useful. Server logs are used to
+        detect and block abuse (rate limiting, lockout).
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        The site sets a session cookie (to remember you between pages) and a
+        CSRF cookie (to protect form submissions). Both expire when you close
+        your browser. The optional <code>cookieSettings</code> link in the
+        footer is currently a no-op placeholder.
+      </p>
+
+      <h2>Contact</h2>
+      <p>Privacy questions: <a href="mailto:pdpthapa1515@gmail.com">pdpthapa1515@gmail.com</a></p>
+    </div>
+  </div>
+</section>
+{% endblock topics %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Something went wrong · Notes{% endblock %}
+
+{% block header %}
+<header class="header" id="header">
+  <div class="container">
+    <a href="{% url 'index' %}" class="logo" aria-label="Notes Home">
+      <i class="fas fa-graduation-cap"></i>
+      <span>NOTES</span>
+    </a>
+    <nav class="navbar" id="navbar">
+      <ul>
+        <li><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+        <li><a href="{% url 'index' %}#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+
+{% block topics %}
+<section class="error-section">
+  <div class="container">
+    <div class="error-content" data-aos="fade-up">
+      <div class="error-icon"><i class="fas fa-triangle-exclamation"></i></div>
+      <h1 class="error-code">500</h1>
+      <h2 class="error-title">Something went wrong on our end</h2>
+      <p class="error-description">
+        We've logged the error. Please try again in a moment.
+      </p>
+      <a href="{% url 'index' %}" class="btn btn-primary">
+        <i class="fas fa-home"></i> Back to home
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock topics %}

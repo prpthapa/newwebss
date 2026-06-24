@@ -27,8 +27,11 @@ urlpatterns = [
     # Bulk upload (admin only)
     path('bulk-upload-notes/', bulk_upload_notes, name='admin_bulk_upload_notes'),
 
-    # Private studio section
-    path('studio/', include('notes.studio_urls')),
+    # NOTE: the private /studio/ section is mounted at the project level
+    # in `notes_project/urls.py`. Do not include `notes.studio_urls` again
+    # here — Django would register the `studio` namespace twice and the
+    # second registration would shadow the first, with `reverse()` calls
+    # routing to the wrong views.
 
     # API endpoints
     path('api/contact/', views.contact_submit, name='contact_submit'),

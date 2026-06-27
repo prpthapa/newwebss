@@ -1,177 +1,371 @@
-# Notes - Educational Study Platform
+# Notes - Educational Platform Backend
 
-A Django-based web application that provides students with access to high-quality handwritten notes for subjects like Physics, Chemistry, and Computer Science.
-
-![Python](https://img.shields.io/badge/Python-3.12-blue)
-![Django](https://img.shields.io/badge/Django-6.0.2-green)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+A Django-based backend system for managing and displaying educational notes across multiple subjects.
 
 ## Features
 
-- **Multi-Subject Support** - Organized notes for Physics, Chemistry, Computer Science, and more
-- **Hierarchical Structure** - Subjects → Chapters → Topics → Notes
-- **Cloudinary Integration** - Cloud-based image storage for note images and thumbnails
-- **Responsive Design** - Modern, mobile-friendly UI with AOS animations
-- **Admin Dashboard** - Rich Django admin interface with bulk upload capability
-- **Contact Form** - Built-in contact form with email notifications
-- **View Tracking** - Track note views for analytics
-- **CORS Support** - Ready for frontend/backend separation
+✨ **Key Features:**
+- 📚 Multi-subject support (Physics, Chemistry, Computer Science, etc.)
+- 📖 Chapter-based organization
+- 🖼️ Image-based note display with viewer features
+- 👨‍💼 Comprehensive Django Admin panel
+- 📱 Responsive design
+- 🔍 View counter for notes
+- 🎨 Customizable subject themes and icons
+- 📧 Contact form functionality
 
 ## Project Structure
 
 ```
 notes_project/
-├── notes_project/          # Django project settings
-│   ├── settings.py         # Configuration (DB, Cloudinary, etc.)
-│   ├── urls.py             # Root URL configuration
-│   └── wsgi.py             # WSGI application
-├── notes/                  # Main application
-│   ├── models.py           # Subject, Chapter, Topic, Note models
-│   ├── views.py            # Page views and API endpoints
-│   ├── urls.py             # App URL patterns
-│   ├── admin.py            # Admin panel configuration
-│   └── bulk_upload.py      # Bulk note upload functionality
-├── templates/              # HTML templates
-│   ├── base.html           # Base template with header/footer
-│   ├── index.html          # Homepage
-│   ├── subject_detail.html # Subject listing page
-│   ├── chapter_detail.html # Chapter listing page
-│   └── topic_detail.html   # Notes viewing page
-├── static/                 # Static files (CSS, JS, images)
-├── media/                  # Uploaded media files
-├── manage.py               # Django management script
-└── requirements.txt        # Python dependencies
+├── config/                 # Django project settings
+│   ├── __init__.py
+│   ├── settings.py        # Main settings
+│   ├── urls.py            # Root URL configuration
+│   ├── wsgi.py            # WSGI config
+│   └── asgi.py            # ASGI config
+├── notes_app/             # Main application
+│   ├── migrations/        # Database migrations
+│   ├── static/            # Static files (CSS, JS, images)
+│   │   ├── css/
+│   │   ├── js/
+│   │   └── images/
+│   ├── templates/         # HTML templates
+│   │   └── notes_app/
+│   ├── models.py          # Database models
+│   ├── views.py           # View functions
+│   ├── urls.py            # App URL patterns
+│   ├── admin.py           # Admin configuration
+│   └── apps.py            # App configuration
+├── templates/             # Base templates
+│   └── base.html
+├── media/                 # Uploaded files
+│   ├── subjects/          # Subject preview images
+│   ├── chapters/          # Chapter thumbnails
+│   └── note_images/       # Note page images
+├── manage.py              # Django management script
+└── requirements.txt       # Python dependencies
 ```
 
-## Data Models
+## Database Models
 
-| Model | Description |
-|-------|-------------|
-| `Subject` | Top-level subject (e.g., Physics, Chemistry) with preview image and icon |
-| `Chapter` | Chapters within a subject with thumbnails and ordering |
-| `Topic` | Topics within a chapter with thumbnails |
-| `Note` | Individual note images with page numbers and view counts |
-| `ContactMessage` | Contact form submissions |
+### Subject
+- Name, slug, description
+- Preview image and icon
+- Color theme
+- Display order
+- Active status
 
-## Installation
+### Chapter
+- Belongs to a Subject
+- Chapter number and title
+- Description and thumbnail
+- Slug for URLs
+
+### Note
+- Belongs to a Chapter
+- Page number and title
+- Image file
+- Description
+- View counter
+
+### ContactMessage
+- Contact form submissions
+- Name, email, subject, message
+- Read status
+
+## Installation & Setup
 
 ### Prerequisites
+- Python 3.8 or higher
+- pip (Python package manager)
+- Virtual environment (recommended)
 
-- Python 3.12+
-- PostgreSQL (or SQLite for development)
-
-### Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd notes_project
-   ```
-
-2. **Create and activate virtual environment**
-   ```bash
-   python -m venv venv
-   # Windows
-   venv\Scripts\activate
-   # Linux/Mac
-   source venv/bin/activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Create `.env` file** (optional for local dev — defaults work when `DEBUG=True`)
-   ```bash
-   cp .env.example .env
-   # Edit .env and replace the placeholders with real values.
-   # Generate a SECRET_KEY with:
-   #   python -c "import secrets; print(secrets.token_urlsafe(50))"
-   ```
-
-5. **Run migrations**
-   ```bash
-   python manage.py migrate
-   ```
-
-6. **Create superuser**
-   ```bash
-   python manage.py createsuperuser
-   ```
-
-7. **Run development server**
-   ```bash
-   python manage.py runserver
-   ```
-
-8. **Access the application**
-   - Homepage: http://localhost:8000
-   - Admin panel: http://localhost:8000/admin
-
-## Deployment
-
-### Production Server
-
-The project uses **Gunicorn** as the WSGI server and **WhiteNoise** for static file serving.
+### Step 1: Install Dependencies
 
 ```bash
-# Install production dependencies
-pip install -r requirements.txt
+# Create virtual environment (recommended)
+python -m venv venv
 
-# Run with Gunicorn
-gunicorn notes_project.wsgi:application
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install required packages
+pip install -r requirements.txt
 ```
 
-### Deploying to Render
+### Step 2: Database Setup
 
-The repository includes a `render.yaml` Blueprint and a `build.sh` script. To deploy:
+```bash
+# Create database migrations
+python manage.py makemigrations
 
-1. In the Render dashboard: **New** → **Blueprint** → connect this repo.
-2. Render will create the Postgres database and web service automatically.
-3. On first deploy, Render auto-generates `SECRET_KEY`, `STUDIO_USERNAME`, and `STUDIO_PASSWORD`. Change the studio credentials in the web service's **Environment** tab to values you choose.
-4. Create a Django admin user once via the Render shell:
-   ```bash
-   python manage.py createsuperuser
+# Apply migrations to create database tables
+python manage.py migrate
+```
+
+### Step 3: Create Admin User
+
+```bash
+# Create a superuser account for admin access
+python manage.py createsuperuser
+
+# Follow the prompts to set:
+# - Username
+# - Email
+# - Password
+```
+
+### Step 4: Run Development Server
+
+```bash
+python manage.py runserver
+
+# Server will start at: http://127.0.0.1:8000/
+# Admin panel: http://127.0.0.1:8000/admin/
+```
+
+## Admin Panel Usage
+
+### Accessing Admin Panel
+1. Navigate to `http://127.0.0.1:8000/admin/`
+2. Login with your superuser credentials
+
+### Adding Content
+
+#### 1. Add Subjects
+- Go to **Subjects** in admin
+- Click **Add Subject**
+- Fill in:
+  - Name (e.g., "Physics")
+  - Description
+  - Upload preview image
+  - Set icon class (FontAwesome icons, e.g., "fas fa-atom")
+  - Set color theme (hex code, e.g., "#4A90E2")
+  - Set display order
+  - Mark as active
+- Save
+
+#### 2. Add Chapters
+- Go to **Chapters** in admin
+- Click **Add Chapter**
+- Fill in:
+  - Select subject
+  - Chapter number
+  - Title
+  - Description
+  - Upload thumbnail (optional)
+  - Mark as active
+- Save
+
+#### 3. Add Notes
+- Go to **Notes** in admin
+- Click **Add Note**
+- Fill in:
+  - Select chapter
+  - Page number
+  - Title
+  - Upload note image
+  - Add description (optional)
+  - Mark as active
+- Save
+
+**Tip:** You can also add notes directly from the Chapter edit page using inline forms!
+
+### Managing Content
+
+#### Bulk Operations
+- Use checkboxes to select multiple items
+- Use action dropdown for bulk operations
+- Mark items as active/inactive
+
+#### Filtering
+- Use right sidebar filters to find content by:
+  - Subject
+  - Active status
+  - Creation date
+
+#### Searching
+- Use search bar to find content by name, title, or description
+
+## URL Structure
+
+```
+/                                          # Home page
+/subject/<slug>/                           # Subject detail (list of chapters)
+/subject/<slug>/chapter/<slug>/            # Chapter detail (notes viewer)
+/contact/                                  # Contact form
+/admin/                                    # Admin panel
+```
+
+## Configuration
+
+### Settings (`config/settings.py`)
+
+Key settings you might want to modify:
+
+```python
+# Security
+SECRET_KEY = 'your-secret-key-here'  # Change in production!
+DEBUG = True                          # Set to False in production
+ALLOWED_HOSTS = ['*']                 # Restrict in production
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Static files
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+```
+
+### Production Deployment
+
+Before deploying to production:
+
+1. **Change SECRET_KEY**:
+   ```python
+   import secrets
+   SECRET_KEY = secrets.token_urlsafe(50)
    ```
 
-The default gunicorn config (see `gunicorn.conf.py`) honours Render's `PORT` env var and runs 3 workers on the free tier. Logs stream to stdout, which Render's log drainer captures.
+2. **Disable DEBUG**:
+   ```python
+   DEBUG = False
+   ```
 
-### Rotate the historical SECRET_KEY
+3. **Set ALLOWED_HOSTS**:
+   ```python
+   ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
+   ```
 
-> **Heads up:** an older version of this repository had a real-looking `SECRET_KEY` value committed to `.env` for local development. If you forked/cloned the project before the hardening PR, rotate the key:
->
-> 1. Generate a fresh one: `python -c "import secrets; print(secrets.token_urlsafe(50))"`
-> 2. Set it in Render's env-var UI (the `SECRET_KEY` row will be regenerated automatically on the next deploy, but you can paste your own value to keep it stable).
-> 3. Any existing sessions, password reset links, or signed cookies will be invalidated — that's expected.
+4. **Collect static files**:
+   ```bash
+   python manage.py collectstatic
+   ```
 
-## API Endpoints
+5. **Use production database** (PostgreSQL recommended):
+   ```python
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql',
+           'NAME': 'your_db_name',
+           'USER': 'your_db_user',
+           'PASSWORD': 'your_db_password',
+           'HOST': 'localhost',
+           'PORT': '5432',
+       }
+   }
+   ```
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/contact/` | POST | Submit contact form |
-| `/api/note/<id>/view/` | POST | Increment note view count |
+## Features Breakdown
 
-## Admin Features
+### Frontend Features
+- **Responsive Design**: Works on all devices
+- **Smooth Animations**: AOS library integration
+- **Image Viewer**: 
+  - Scroll, grid, and slideshow modes
+  - Zoom controls
+  - Fullscreen view
+  - Keyboard navigation
+- **Chapter Navigation**: Easy prev/next navigation
+- **View Counter**: Tracks note popularity
 
-- **Rich Admin Interface** - Custom admin views with image previews
-- **Bulk Upload** - Upload multiple notes at once via `/admin/bulk-upload-notes/`
-- **Inline Editing** - Edit chapters within subjects, topics within chapters
+### Admin Features
+- **Rich Admin Interface**: 
+  - Image previews
+  - Inline editing
+  - Bulk operations
+  - Advanced filtering
+- **Statistics**: 
+  - Chapter count per subject
+  - Note count per chapter
+  - View counts per note
+- **Media Management**: Automatic file organization
+- **Validation**: Unique slugs and ordering
 
-## Technology Stack
+## Customization
 
-- **Backend**: Django 6.0.2, Django REST Framework 3.16.1
-- **Database**: PostgreSQL (production), SQLite (development)
-- **Static Files**: WhiteNoise
-- **Server**: Gunicorn
-- **Frontend**: HTML5, CSS3, JavaScript, AOS Animations, Font Awesome
+### Adding New Subject Icons
+Use FontAwesome 6 icon classes:
+```
+fas fa-atom          # Physics
+fas fa-flask         # Chemistry
+fas fa-laptop-code   # Computer Science
+fas fa-calculator    # Mathematics
+fas fa-dna           # Biology
+```
 
-## Contributing
+### Changing Color Themes
+Use hex color codes in Subject admin:
+```
+#4A90E2  # Blue
+#E74C3C  # Red
+#2ECC71  # Green
+#F39C12  # Orange
+#9B59B6  # Purple
+```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Troubleshooting
+
+### Static files not loading
+```bash
+python manage.py collectstatic
+```
+
+### Database errors after model changes
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+### Admin styles not working
+Make sure you've run:
+```bash
+python manage.py collectstatic --noinput
+```
+
+### Images not displaying
+1. Check MEDIA_ROOT and MEDIA_URL settings
+2. Ensure debug mode is on or configure web server for media files
+3. Verify file permissions on media directory
+
+## Development Tips
+
+### Adding Custom Management Commands
+Create `notes_app/management/commands/` directory and add commands
+
+### Database Backup
+```bash
+# SQLite
+python manage.py dumpdata > backup.json
+
+# Restore
+python manage.py loaddata backup.json
+```
+
+### Testing
+```bash
+python manage.py test notes_app
+```
 
 ## Support
 
-For issues and questions:
-- Create an issue on GitHub
-- Contact: pdpthapa1515@gmail.com
+For issues or questions:
+1. Check Django documentation: https://docs.djangoproject.com/
+2. Review code comments in models.py and views.py
+3. Check admin panel configuration in admin.py
+
+## License
+
+This project is created for educational purposes.
+
+## Credits
+
+- Django Web Framework
+- FontAwesome Icons
+- AOS Animation Library
+- Pillow (Python Imaging Library)

@@ -47,7 +47,7 @@ def _require_secret(var_name: str) -> str:
 
 
 # `cast=bool` is required — `default='False'` would otherwise be a truthy string.
-DEBUG = config("DEBUG", default="False", cast=bool)
+DEBUG = config("DEBUG", default="True", cast=bool)
 
 if DEBUG:
     # Local dev: safe defaults so `runserver`, tests, and migrations work

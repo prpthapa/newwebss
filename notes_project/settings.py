@@ -212,9 +212,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 # in-process LocMem cache is fine for a single-worker dev server. Render runs
 # multiple gunicorn workers, so the lockout is best-effort there — that's an
 # acceptable trade-off for a non-public studio endpoint.
-# `dj-database-url` parses DATABASE_URL on Heroku/Render-style platforms.
-# Cache is set up separately below — django-ratelimit and the studio-auth
-# lockout both need a working cache.
 CACHES = {
     "default": {
         # Default to in-process LocMemCache. On Render (multi-worker) the

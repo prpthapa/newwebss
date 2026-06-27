@@ -1,6 +1,5 @@
 from django.urls import path, include
 from . import views
-from .bulk_upload import bulk_upload_notes
 
 urlpatterns = [
     # Home page
@@ -24,9 +23,6 @@ urlpatterns = [
          views.topic_detail, 
          name='topic_detail'),
     
-    # Bulk upload (admin only)
-    path('bulk-upload-notes/', bulk_upload_notes, name='admin_bulk_upload_notes'),
-
     # NOTE: the private /studio/ section is mounted at the project level
     # in `notes_project/urls.py`. Do not include `notes.studio_urls` again
     # here — Django would register the `studio` namespace twice and the

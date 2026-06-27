@@ -1,9 +1,7 @@
-import os
 from pathlib import Path
 from django.core.management.base import BaseCommand, CommandError
 from django.core.files.base import ContentFile
 from notes.models import Subject, Chapter, Topic, Note
-import requests
 
 
 class Command(BaseCommand):

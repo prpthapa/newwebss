@@ -17,34 +17,41 @@ A Django-based backend system for managing and displaying educational notes acro
 ## Project Structure
 
 ```
-notes_project/
-├── config/                 # Django project settings
-│   ├── __init__.py
-│   ├── settings.py        # Main settings
-│   ├── urls.py            # Root URL configuration
-│   ├── wsgi.py            # WSGI config
-│   └── asgi.py            # ASGI config
-├── notes_app/             # Main application
-│   ├── migrations/        # Database migrations
-│   ├── static/            # Static files (CSS, JS, images)
-│   │   ├── css/
-│   │   ├── js/
-│   │   └── images/
-│   ├── templates/         # HTML templates
-│   │   └── notes_app/
-│   ├── models.py          # Database models
-│   ├── views.py           # View functions
-│   ├── urls.py            # App URL patterns
-│   ├── admin.py           # Admin configuration
-│   └── apps.py            # App configuration
-├── templates/             # Base templates
-│   └── base.html
-├── media/                 # Uploaded files
-│   ├── subjects/          # Subject preview images
-│   ├── chapters/          # Chapter thumbnails
-│   └── note_images/       # Note page images
-├── manage.py              # Django management script
-└── requirements.txt       # Python dependencies
+notes_project/                  # Repo root
+├── manage.py                  # Django CLI
+├── requirements.txt           # Pinned dependencies (Django, Pillow, …)
+├── gunicorn.conf.py           # Production WSGI config (Render)
+├── build.sh                   # Render build step
+├── render.yaml                # Render Blueprint (defines web service + DB)
+├── Procfile                   # Alternative start command
+├── .env                       # Local secrets (gitignored)
+├── notes_project/             # Django settings package
+│   ├── settings.py            # 12-factor settings, env-driven
+│   ├── urls.py                # Root URLconf; mounts admin/, studio/, /
+│   ├── wsgi.py / asgi.py
+│   ├── views.py               # 404/500 handlers + legal pages
+│   ├── health.py              # /healthz/ (no DB access)
+│   └── media_serve.py         # Production media serving (WhiteNoise handles static)
+├── notes/                     # Single Django app
+│   ├── models.py              # Subject → Chapter → Topic → Note + ContactMessage
+│   ├── views.py               # Public page views + API endpoints
+│   ├── studio_views.py        # Private /studio/ views (login-gated) + bulk_create_notes
+│   ├── studio_auth.py         # Studio session gate + IP lockout
+│   ├── studio_forms.py        # Studio forms (bulk upload, CRUD)
+│   ├── studio_urls.py         # /studio/ URLconf
+│   ├── forms.py               # Public ContactForm
+│   ├── admin.py               # Django admin registration
+│   ├── urls.py                # Public URLconf
+│   ├── apps.py
+│   ├── management/commands/   # bulk_upload_notes (folder import CLI)
+│   ├── migrations/
+│   └── tests/                 # Smoke tests (health, pages, contact, studio auth)
+├── templates/                 # Project-wide templates
+│   ├── base.html, 404.html, 500.html, privacy_policy.html, terms.html
+│   └── studio/                # studio/{login,dashboard,upload,new_node}.html
+├── static/                    # Source assets (CSS, JS, images)
+├── staticfiles/               # collectstatic output (gitignored)
+└── media/                     # User uploads (gitignored)
 ```
 
 ## Database Models
@@ -52,7 +59,6 @@ notes_project/
 ### Subject
 - Name, slug, description
 - Preview image and icon
-- Color theme
 - Display order
 - Active status
 
@@ -62,8 +68,14 @@ notes_project/
 - Description and thumbnail
 - Slug for URLs
 
-### Note
+### Topic
 - Belongs to a Chapter
+- Topic number and title
+- Description and thumbnail
+- Slug for URLs
+
+### Note
+- Belongs to a Topic
 - Page number and title
 - Image file
 - Description
@@ -74,192 +86,6 @@ notes_project/
 - Name, email, subject, message
 - Read status
 
-## Installation & Setup
-
-### Prerequisites
-- Python 3.8 or higher
-- pip (Python package manager)
-- Virtual environment (recommended)
-
-### Step 1: Install Dependencies
-
-```bash
-# Create virtual environment (recommended)
-python -m venv venv
-
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
-
-# Install required packages
-pip install -r requirements.txt
-```
-
-### Step 2: Database Setup
-
-```bash
-# Create database migrations
-python manage.py makemigrations
-
-# Apply migrations to create database tables
-python manage.py migrate
-```
-
-### Step 3: Create Admin User
-
-```bash
-# Create a superuser account for admin access
-python manage.py createsuperuser
-
-# Follow the prompts to set:
-# - Username
-# - Email
-# - Password
-```
-
-### Step 4: Run Development Server
-
-```bash
-python manage.py runserver
-
-# Server will start at: http://127.0.0.1:8000/
-# Admin panel: http://127.0.0.1:8000/admin/
-```
-
-## Admin Panel Usage
-
-### Accessing Admin Panel
-1. Navigate to `http://127.0.0.1:8000/admin/`
-2. Login with your superuser credentials
-
-### Adding Content
-
-#### 1. Add Subjects
-- Go to **Subjects** in admin
-- Click **Add Subject**
-- Fill in:
-  - Name (e.g., "Physics")
-  - Description
-  - Upload preview image
-  - Set icon class (FontAwesome icons, e.g., "fas fa-atom")
-  - Set color theme (hex code, e.g., "#4A90E2")
-  - Set display order
-  - Mark as active
-- Save
-
-#### 2. Add Chapters
-- Go to **Chapters** in admin
-- Click **Add Chapter**
-- Fill in:
-  - Select subject
-  - Chapter number
-  - Title
-  - Description
-  - Upload thumbnail (optional)
-  - Mark as active
-- Save
-
-#### 3. Add Notes
-- Go to **Notes** in admin
-- Click **Add Note**
-- Fill in:
-  - Select chapter
-  - Page number
-  - Title
-  - Upload note image
-  - Add description (optional)
-  - Mark as active
-- Save
-
-**Tip:** You can also add notes directly from the Chapter edit page using inline forms!
-
-### Managing Content
-
-#### Bulk Operations
-- Use checkboxes to select multiple items
-- Use action dropdown for bulk operations
-- Mark items as active/inactive
-
-#### Filtering
-- Use right sidebar filters to find content by:
-  - Subject
-  - Active status
-  - Creation date
-
-#### Searching
-- Use search bar to find content by name, title, or description
-
-## URL Structure
-
-```
-/                                          # Home page
-/subject/<slug>/                           # Subject detail (list of chapters)
-/subject/<slug>/chapter/<slug>/            # Chapter detail (notes viewer)
-/contact/                                  # Contact form
-/admin/                                    # Admin panel
-```
-
-## Configuration
-
-### Settings (`config/settings.py`)
-
-Key settings you might want to modify:
-
-```python
-# Security
-SECRET_KEY = 'your-secret-key-here'  # Change in production!
-DEBUG = True                          # Set to False in production
-ALLOWED_HOSTS = ['*']                 # Restrict in production
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-# Static files
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-```
-
-### Production Deployment
-
-Before deploying to production:
-
-1. **Change SECRET_KEY**:
-   ```python
-   import secrets
-   SECRET_KEY = secrets.token_urlsafe(50)
-   ```
-
-2. **Disable DEBUG**:
-   ```python
-   DEBUG = False
-   ```
-
-3. **Set ALLOWED_HOSTS**:
-   ```python
-   ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
-   ```
-
-4. **Collect static files**:
-   ```bash
-   python manage.py collectstatic
-   ```
-
-5. **Use production database** (PostgreSQL recommended):
-   ```python
-   DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'your_db_name',
-           'USER': 'your_db_user',
-           'PASSWORD': 'your_db_password',
-           'HOST': 'localhost',
-           'PORT': '5432',
-       }
-   }
-   ```
 
 ## Features Breakdown
 

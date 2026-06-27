@@ -6,8 +6,39 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from .bulk_upload import bulk_create_notes
-from .models import Subject, Chapter, Topic, Note
+from .models import Note, Subject, Chapter, Topic
+
+
+def bulk_create_notes(topic, files, title_template='Note'):
+    """
+    Create Note rows for each uploaded file under ``topic``, auto-numbering
+    page_number starting from max(page_number)+1 (or 1 if topic has none).
+
+    Returns the number of notes created.
+    """
+    if not files:
+        return 0
+
+    last_note = (
+        Note.objects.filter(topic=topic).order_by('-page_number').first()
+    )
+    start_page = (last_note.page_number + 1) if last_note else 1
+
+    created_count = 0
+    for i, file in enumerate(files):
+        page_num = start_page + i
+        title = f"{title_template} {page_num}"
+
+        Note.objects.create(
+            topic=topic,
+            title=title,
+            image=file,
+            page_number=page_num,
+            is_active=True,
+        )
+        created_count += 1
+
+    return created_count
 from .studio_auth import (
     SESSION_KEY,
     check_studio_credentials,

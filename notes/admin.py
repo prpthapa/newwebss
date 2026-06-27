@@ -176,11 +176,6 @@ class NoteAdmin(admin.ModelAdmin):
         css = {
             'all': ('admin/css/custom_admin.css',)
         }
-    
-    def changelist_view(self, request, extra_context=None):
-        extra_context = extra_context or {}
-        extra_context['bulk_upload_url'] = '/admin/bulk-upload-notes/'
-        return super().changelist_view(request, extra_context=extra_context)
 
     def note_info(self, obj):
         return f"Page {obj.page_number}: {obj.title}"

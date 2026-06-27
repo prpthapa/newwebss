@@ -9,9 +9,9 @@ import os
 
 bind = f"0.0.0.0:{os.environ.get('PORT', '8000')}"
 
-# Render sets WEB_CONCURRENCY in newer environments; fall back to 3 for
-# the free web dyno (2 vCPU).
-workers = int(os.environ.get("WEB_CONCURRENCY", "3"))
+# Render sets WEB_CONCURRENCY in newer environments; fall back to 2 for
+# the free web dyno (~512 MB RAM).
+workers = int(os.environ.get("WEB_CONCURRENCY", "2"))
 worker_class = "sync"
 
 # Cold-start tolerance: free-tier services can take 30-60s to boot.

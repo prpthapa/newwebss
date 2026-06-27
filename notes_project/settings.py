@@ -4,6 +4,7 @@ Django settings for the Notes project.
 Hardened for production. See the project README for the env-var contract.
 """
 import os
+import sys
 from pathlib import Path
 
 import dj_database_url
@@ -12,6 +13,9 @@ from django.core.exceptions import ImproperlyConfigured
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Detect `manage.py test` so we don't force HTTPS redirects in the test client.
+TESTING = "test" in sys.argv
 
 
 # ---------------------------------------------------------------------------
@@ -42,29 +46,67 @@ def _require_secret(var_name: str) -> str:
     return value
 
 
-SECRET_KEY = _require_secret("SECRET_KEY")
-
 # `cast=bool` is required — `default='False'` would otherwise be a truthy string.
 DEBUG = config("DEBUG", default="False", cast=bool)
 
-ALLOWED_HOSTS = config(
-    "ALLOWED_HOSTS",
-    default="localhost,127.0.0.1",
-    cast=Csv(),
-)
+if DEBUG:
+    # Local dev: safe defaults so `runserver`, tests, and migrations work
+    # without a .env file. Never used when DEBUG is False.
+    SECRET_KEY = config(
+        "SECRET_KEY",
+        default="local-dev-only-" + "x" * 50,
+    )
+    STUDIO_USERNAME = config("STUDIO_USERNAME", default="studio")
+    STUDIO_PASSWORD = config("STUDIO_PASSWORD", default="studio")
+else:
+    SECRET_KEY = _require_secret("SECRET_KEY")
+    STUDIO_USERNAME = _require_secret("STUDIO_USERNAME")
+    STUDIO_PASSWORD = _require_secret("STUDIO_PASSWORD")
 
-# CSRF_TRUSTED_ORIGINS must include the https:// origins the front-end POSTs
-# to. Pull it from the env (comma-separated) and fall back to https:// versions
-# of every ALLOWED_HOSTS entry so the contact form works out of the box.
-CSRF_TRUSTED_ORIGINS = config(
-    "CSRF_TRUSTED_ORIGINS",
-    default=",".join(f"https://{h}" for h in ALLOWED_HOSTS),
-    cast=Csv(),
-)
 
-# Studio credentials (env-based, kept as-is for backward compatibility).
-STUDIO_USERNAME = _require_secret("STUDIO_USERNAME")
-STUDIO_PASSWORD = _require_secret("STUDIO_PASSWORD")
+def _build_allowed_hosts() -> list[str]:
+    """Merge operator-configured hosts with Render's auto-injected hostname."""
+    hosts = list(
+        config(
+            "ALLOWED_HOSTS",
+            default="localhost,127.0.0.1",
+            cast=Csv(),
+        )
+    )
+    render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+    if render_host and render_host not in hosts:
+        hosts.append(render_host)
+    # Wildcard covers any *.onrender.com service URL before a custom domain.
+    if ".onrender.com" not in hosts:
+        hosts.append(".onrender.com")
+    return hosts
+
+
+ALLOWED_HOSTS = _build_allowed_hosts()
+
+
+def _build_csrf_trusted_origins(hosts: list[str]) -> list[str]:
+    """Build https:// origins for CSRF from ALLOWED_HOSTS + Render hostname."""
+    origins = list(
+        config(
+            "CSRF_TRUSTED_ORIGINS",
+            default="",
+            cast=Csv(),
+        )
+    )
+    if not origins:
+        for host in hosts:
+            if host.startswith("."):
+                continue
+            origins.append(f"https://{host}")
+    render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+    render_origin = f"https://{render_host}" if render_host else ""
+    if render_origin and render_origin not in origins:
+        origins.append(render_origin)
+    return origins
+
+
+CSRF_TRUSTED_ORIGINS = _build_csrf_trusted_origins(ALLOWED_HOSTS)
 
 
 # ---------------------------------------------------------------------------
@@ -123,8 +165,15 @@ DATABASES = {
             default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         ),
         conn_max_age=600,
+        conn_health_checks=True,
     )
 }
+
+# Render Postgres requires SSL; dj-database-url picks this up from the URL when
+# present, but enforce it for any remote host in production as a fallback.
+if not DEBUG and DATABASES["default"].get("ENGINE", "").endswith("postgresql"):
+    DATABASES["default"].setdefault("OPTIONS", {})
+    DATABASES["default"]["OPTIONS"].setdefault("sslmode", "require")
 
 # ---------------------------------------------------------------------------
 # Auth
@@ -223,7 +272,7 @@ X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"
 
-if not DEBUG:
+if not DEBUG and not TESTING:
     # Cookies only over HTTPS.
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
@@ -233,7 +282,8 @@ if not DEBUG:
     CSRF_COOKIE_SAMESITE = "Lax"
 
     # Force HTTPS. Render's load balancer handles the redirect, so this is a
-    # belt-and-braces measure.
+    # belt-and-braces measure. Skipped during tests (TESTING) so the test
+    # client is not redirected away from every HTTP request.
     SECURE_SSL_REDIRECT = True
 
     # HSTS — Render sets HSTS at the edge too, but apply it at the app layer
@@ -246,6 +296,9 @@ if not DEBUG:
     # private, so a longer session is fine, but the admin should expire.
     SESSION_COOKIE_AGE = config("SESSION_COOKIE_AGE", default=60 * 60 * 8, cast=int)
     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+elif not DEBUG and TESTING:
+    # Keep secure cookies off in tests so the client can read CSRF tokens over HTTP.
+    SECURE_SSL_REDIRECT = False
 
 
 # ---------------------------------------------------------------------------

@@ -82,7 +82,7 @@ notes_project/
    pip install -r requirements.txt
    ```
 
-4. **Create `.env` file**
+4. **Create `.env` file** (optional for local dev — defaults work when `DEBUG=True`)
    ```bash
    cp .env.example .env
    # Edit .env and replace the placeholders with real values.
@@ -129,7 +129,7 @@ The repository includes a `render.yaml` Blueprint and a `build.sh` script. To de
 
 1. In the Render dashboard: **New** → **Blueprint** → connect this repo.
 2. Render will create the Postgres database and web service automatically.
-3. After the first deploy finishes, set the `STUDIO_USERNAME` and `STUDIO_PASSWORD` env vars manually in the web service's **Environment** tab (the Blueprint leaves them `sync: false` for security).
+3. On first deploy, Render auto-generates `SECRET_KEY`, `STUDIO_USERNAME`, and `STUDIO_PASSWORD`. Change the studio credentials in the web service's **Environment** tab to values you choose.
 4. Create a Django admin user once via the Render shell:
    ```bash
    python manage.py createsuperuser

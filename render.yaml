@@ -9,24 +9,25 @@ services:
     plan: free
     region: oregon
     buildCommand: "./build.sh"
-    startCommand: "gunicorn notes_project.wsgi:application --log-file -"
+    startCommand: "gunicorn notes_project.wsgi:application -c gunicorn.conf.py"
+    healthCheckPath: /healthz/
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
       - key: WEB_CONCURRENCY
-        value: "3"
+        value: "2"            # Free tier has ~512 MB RAM; 2 workers avoids OOM.
       - key: SECRET_KEY
         generateValue: true   # Render generates a random SECRET_KEY on first deploy.
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: "tpradeep.com.np,www.tpradeep.com.np"
+        value: "tpradeep.com.np,www.tpradeep.com.np,.onrender.com"
       - key: CSRF_TRUSTED_ORIGINS
         value: "https://tpradeep.com.np,https://www.tpradeep.com.np"
       - key: STUDIO_USERNAME
-        sync: false           # Must be set manually in the dashboard.
+        generateValue: true   # Random on first deploy; change in the dashboard.
       - key: STUDIO_PASSWORD
-        sync: false           # Must be set manually in the dashboard.
+        generateValue: true   # Random on first deploy; change in the dashboard.
       - key: CONTACT_NOTIFICATION_EMAIL
         value: "pdpthapa1515@gmail.com"
       - key: EMAIL_BACKEND

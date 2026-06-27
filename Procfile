@@ -1,1 +1,1 @@
-web: gunicorn notes_project.wsgi:application --log-file -
+web: gunicorn notes_project.wsgi:application -c gunicorn.conf.py

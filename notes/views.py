@@ -124,19 +124,33 @@ def computer_science(request):
 # ---------------------------------------------------------------------------
 # django-ratelimit is optional in code but pinned in requirements.txt.
 try:
-    from django_ratelimit.decorators import ratelimit
+    from django_ratelimit.decorators import ratelimit as _ratelimit
 except ImportError:  # pragma: no cover - requirement pinning handles this
-    ratelimit = None
+    _ratelimit = None
 
-if ratelimit is None:
+if _ratelimit is None:
     logger.warning(
         "django-ratelimit is NOT installed; rate limits on contact and view "
         "counters are INACTIVE."
     )
 
 
+def _apply_ratelimit(*dec_args, **dec_kwargs):
+    """
+    Apply @ratelimit when the package is available; otherwise return the
+    function unchanged. Using a wrapper avoids the `None(...)` TypeError that
+    would otherwise fire at import time if the package is missing.
+    """
+    def _decorator(view):
+        if _ratelimit is None:
+            return view
+        return _ratelimit(*dec_args, **dec_kwargs)(view)
+
+    return _decorator
+
+
 @require_POST
-@ratelimit(key="ip", rate="5/m", method="POST", block=True)
+@_apply_ratelimit(key="ip", rate="5/m", method="POST", block=True)
 def contact_submit(request):
     """
     Handle contact form submission via AJAX.
@@ -198,7 +212,7 @@ def contact_submit(request):
 
 
 @require_POST
-@ratelimit(key="ip", rate="60/m", method="POST", block=True)
+@_apply_ratelimit(key="ip", rate="60/m", method="POST", block=True)
 def increment_note_view(request, note_id):
     """Increment view count for a note. Rate-limited per IP."""
     note = get_object_or_404(Note, id=note_id, is_active=True)
